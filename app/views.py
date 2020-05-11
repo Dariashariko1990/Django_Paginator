@@ -23,8 +23,14 @@ def bus_stations(request):
     stations = paginator.get_page(current_page)
 
     prev_page, next_page = None, None
+    prev_page_url, next_page_url = None, None
+
     if stations.has_previous():
         prev_page = stations.previous_page_number()
+        # url предыдущей страницы
+        pp = {'page': prev_page}
+        url_page = urllib.parse.urlencode(pp)
+        prev_page_url = reverse('bus_stations') + '?' + url_page
     if stations.has_next():
         next_page = stations.next_page_number()
         # url следующей страницы
@@ -35,7 +41,7 @@ def bus_stations(request):
     return render_to_response('index.html', context={
         'bus_stations': stations,
         'current_page': current_page,
-        'prev_page_url': None,
+        'prev_page_url': prev_page_url,
         'next_page_url': next_page_url,
     })
 
